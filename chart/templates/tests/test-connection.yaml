@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "cool-recipe.fullname" . }}-test-connection"
+  labels:
+    {{- include "cool-recipe.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "cool-recipe.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

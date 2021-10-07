@@ -1,0 +1,289 @@
+openapi: 3.0.2
+info:
+  description: "This API's provide recipe manipulation like create, update,..."
+  version: "1.0.0"
+  title: "Cool recipes Api"
+  termsOfService: "https://www.abnamro.nl/doc/term"
+  contact:
+    name: "Engineering Department"
+    url: "https://www.abnamro.nl/dep/engineering"
+    email: "engineering@gabnamro.nl"
+  license:
+    name: "Apache 2.0"
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+externalDocs:
+  url: 'https://api.abnamro.nl/v1/docs'
+servers:
+  - url: 'https://{target}.abnamro.nl/v1/rest'
+    variables:
+      target:
+        enum:
+          - 'api'
+          - 'staging-api'
+        default: 'api'
+    description: "The Cool recipe API Server"
+
+paths:
+  /recipe:
+    post:
+      tags:
+        - "Recipe"
+      summary: "create a recipe"
+      description: "By using this api you can create your own recipe"
+      operationId: "create"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recipe'
+        description: "The recipe to be created"
+        required: true
+      responses:
+        '200':
+          description: "Recipe successfully created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreationOutput'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - "Recipe"
+      summary: "Get recipes"
+      description: "By using this api you can get your own recipes "
+      operationId: "findAll"
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: "name to search"
+          example: "Potato"
+        - in: query
+          name: vegetarian
+          schema:
+            type: boolean
+          description: "Vegetarian to search"
+          example: "true"
+        - in: query
+          name: serves
+          schema:
+            type: integer
+          description: "How many servers this dish"
+          example: 4
+        - in: query
+          name: ingredient
+          schema:
+            type: string
+          description: "ingredient to search"
+          example: "potato"
+        - in: query
+          name: instruction
+          schema:
+            type: string
+          description: "instruction to search"
+          example: "boil"
+      responses:
+        '200':
+          description: "Recipes retrieved"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recipe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /recipe/{id}:
+    put:
+      tags:
+        - "Recipe"
+      summary: "update a recipe"
+      description: "By using this api you can update your already exist recipe"
+      operationId: "update"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: "id to update"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recipe'
+        description: "The recipe to be updated"
+        required: true
+      responses:
+        '204':
+          description: "Recipe successfully updated"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - "Recipe"
+      summary: "Find a recipe"
+      description: "By using this api you can find a recipe by id"
+      operationId: "findById"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: "id to fetch data"
+      responses:
+        '200':
+          description: "fetched data"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - "Recipe"
+      summary: "Delete recipe"
+      description: "By using this api you able to delete a recipe"
+      operationId: "delete"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: "id to delete"
+      responses:
+        '204':
+          description: "recipe deleted"
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    CreationOutput:
+      properties:
+        id:
+          type: integer
+          example: 1
+
+    Recipe:
+      properties:
+        id:
+          type: integer
+          example: 1
+          minimum: 0
+        creationTime:
+          type: string
+          example: 02-10-2021 10:54
+          pattern: "[0-9-: ]{16}"
+        name:
+          type: string
+          example: pooding
+          pattern: "[a-zA-Z0-9@-_/+() ]{1,512}"
+        Vegetarian:
+          type: boolean
+          example: true
+        serves:
+          type: integer
+          example: 4
+          minimum: 1
+        ingredients:
+          type: array
+          items:
+            type: string
+            example: Potato
+            pattern: "[a-zA-Z0-9@-_/+() ]{1,4000}"
+        instruction:
+          type: string
+          example: first biol your potato for 30 minutes.
+          pattern: "[a-zA-Z0-9@-_/+() ]{1,4000}"
+      required:
+        - name
+        - Vegetarian
+        - serves
+        - ingredients
+        - instruction
+
+    Error:
+      properties:
+        title:
+          description: "Error short description"
+          type: string
+        description:
+          description: "Error long description"
+          type: string
+
+  responses:
+    BadRequest:
+      description: "Bad request received"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: "Requested resource not found"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotAcceptable:
+      description: "Not acceptable"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: "Method not allowed"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnsupportedMediaType:
+      description: "Media type not supported"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: "Internal server error"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

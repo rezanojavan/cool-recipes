@@ -1,0 +1,81 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springGradlePluginVersion}")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.hidetake.swagger.generator' version "${swaggerGeneratorPluginVersion}"
+    id 'eclipse'
+    id 'idea'
+    id "io.freefair.lombok" version "${lombokFreefairPluginVersion}"
+}
+
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group 'com.abnamro.ib'
+version '1.0-rc'
+
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+bootRun {
+    args '--server.port=80'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.modelmapper:modelmapper:${modelmapperVersion}"
+    swaggerCodegen "org.openapitools:openapi-generator-cli:${openapiGeneratorCliVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-web:${springbootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-jetty:${springbootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springbootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-security:${springbootVersion}"
+    implementation "com.h2database:h2:1.4.200"
+    implementation "io.swagger.core.v3:swagger-annotations:${swaggerV3Version}"
+    implementation "io.springfox:springfox-swagger2:${springFoxSwagger2Version}"
+    implementation "io.springfox:springfox-swagger-ui:${springFoxSwagger2Version}"
+    implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
+    implementation "org.springdoc:springdoc-openapi-ui:1.2.32"
+    implementation "org.openapitools:jackson-databind-nullable:${openapitoolsJacksonDatabindNullableVersion}"
+    implementation("org.springframework.boot:spring-boot-starter-actuator:${springbootVersion}"){
+        exclude group: 'io.micrometer', module: 'micrometer-core'
+    }
+    implementation "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springbootVersion}") {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation "org.springframework.security:spring-security-test:5.5.2"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.8.1"
+    testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+    testImplementation group: 'com.google.code.gson', name: 'gson', version: '2.8.8'
+}
+
+swaggerSources {
+    document {
+        inputFile = file("specs/cool-recipes.yaml")
+        code {
+            language = 'spring'
+            configFile = file("specs/config-cool-recipes.json")
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileJava.dependsOn swaggerSources.document.code
+sourceSets.main.java.srcDir "${swaggerSources.document.code.outputDir}/src/main/java"

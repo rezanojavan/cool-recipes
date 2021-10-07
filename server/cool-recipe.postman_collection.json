@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "2e5067e9-8e78-4863-a0e9-80796af8f9d4",
+		"name": "cool-recipe",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Recipe by id",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{api_url}}/rest/recipe/1",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"rest",
+						"recipe",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Recipe",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{api_url}}/rest/recipe?name=Baked&vegetarian=true&serves=1&ingredient=Potato&instruction=potato",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"rest",
+						"recipe"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Baked"
+						},
+						{
+							"key": "vegetarian",
+							"value": "true"
+						},
+						{
+							"key": "serves",
+							"value": "1"
+						},
+						{
+							"key": "ingredient",
+							"value": "Potato"
+						},
+						{
+							"key": "instruction",
+							"value": "potato"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Creat Recipe",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"Baked Potato\",\r\n    \"Vegetarian\" : true,\r\n    \"serves\" : 1,\r\n    \"ingredients\" : [\"Potato\", \"Unioin\"],\r\n    \"instruction\" : \"Boil potato with unioin for 30 minutes\"\r\n}"
+				},
+				"url": {
+					"raw": "{{api_url}}/rest/recipe",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"rest",
+						"recipe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Recipe",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"Baked Potato[Edited]\",\r\n    \"Vegetarian\" : true,\r\n    \"serves\" : 1,\r\n    \"ingredients\" : [\"Potato\", \"Unioin\"],\r\n    \"instruction\" : \"Boil potato with unioin for 30 minute\"\r\n}"
+				},
+				"url": {
+					"raw": "{{api_url}}/rest/recipe/1",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"rest",
+						"recipe",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Recipe",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{api_url}}/rest/recipe/1",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"rest",
+						"recipe",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

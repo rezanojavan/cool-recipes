@@ -1,0 +1,6 @@
+{
+  "library": "spring-mvc",
+  "modelPackage": "nl.abnamro.app.dto",
+  "apiPackage": "nl.abnamro.app.spec",
+  "invokerPackage": "nl.abnamro.app"
+}
